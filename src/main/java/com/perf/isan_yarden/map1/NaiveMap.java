@@ -8,12 +8,11 @@ import java.util.concurrent.locks.ReentrantLock;
 public class NaiveMap<K,V> implements Map1.TimedSizableMap<K,V>{
 
     private final Map<K , TimedValue<V>> map;
-    private Lock gcLock,wLock;
+    private Lock wLock;
     private Timer timer;
 
     public NaiveMap(long gcInterval){
         this.timer = new Timer();
-        this.gcLock = new ReentrantLock();
         this.wLock = new ReentrantLock();
         this.map = new HashMap<>();
         this.runGC(TimeUnit.SECONDS.toMillis(gcInterval));
@@ -68,24 +67,13 @@ public class NaiveMap<K,V> implements Map1.TimedSizableMap<K,V>{
         this.timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                System.out.println("running gc...");
-                for (K key : map.keySet()){
-                    TimedValue val = map.get(key);
-                    if(isExpired(val)){
-                        syncRemove(key);
-                    }
-                }
+                map.entrySet().removeIf(e-> {
+                    return isExpired(e.getValue());
+                });
             }
         },0,interval);
     }
 
-    private void syncRemove(K key){
-
-        wLock.lock();
-        this.map.remove(key);
-        wLock.unlock();
-
-    }
 
     public void terminate(){
         this.timer.cancel();
