@@ -12,7 +12,6 @@ public class TimedValue<V> {
         this.value = _val;
         long mills_timestamp = unit.toMillis(duration);
         this.time = System.currentTimeMillis() + mills_timestamp;
-
     }
 
     public long getTime() {
