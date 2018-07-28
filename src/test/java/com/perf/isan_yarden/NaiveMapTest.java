@@ -32,27 +32,30 @@ public class NaiveMapTest {
 
     @Test
     public void shouldInsertParallel() throws InterruptedException {
-        NaiveMap<Integer, Integer> map = new NaiveMap<>(1);
+        for (int j=0;j<15;j++){
+            NaiveMap<Integer, Integer> map = new NaiveMap<>(1);
 
-        Thread t1 = new Thread(()->{
-            for(int i=0; i<100;i++)
-                map.put(i,i,2,TimeUnit.SECONDS);
-        });
+            Thread t1 = new Thread(()->{
+                for(int i=0; i<100;i++)
+                    map.put(i,i,2,TimeUnit.SECONDS);
+            });
 
-        Thread t2 = new Thread(()->{
-            for(int i=100; i<200;i++)
-                map.put(i,i,2,TimeUnit.SECONDS);
-        });
-        t1.start();
-        t2.start();
+            Thread t2 = new Thread(()->{
+                for(int i=100; i<200;i++)
+                    map.put(i,i,2,TimeUnit.SECONDS);
+            });
+            t1.start();
+            t2.start();
 
-        t1.join();
-        t2.join();
+            t1.join();
+            t2.join();
 
-        assertEquals(200,map.size());
-        Thread.sleep(2000);
-        assertEquals(0,map.size());
-        map.terminate();
+            assertEquals(200,map.size());
+            Thread.sleep(2000);
+            assertEquals(0,map.size());
+            map.terminate();
+        }
+
     }
 
     @Test
