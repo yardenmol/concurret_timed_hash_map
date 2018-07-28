@@ -46,11 +46,12 @@ public class NaiveMap<K,V> implements Map1.TimedSizableMap<K,V>{
 
     @Override
     public long size() {
-
-        return this.map.values().stream().filter((vTimedValue)->{
+        wLock.lock();
+        long size = this.map.values().stream().filter((vTimedValue)->{
              return !isExpired(vTimedValue);})
                 .count();
-
+        wLock.unlock();
+        return size;
     }
 
     private boolean isExpired(TimedValue data) {
@@ -63,13 +64,14 @@ public class NaiveMap<K,V> implements Map1.TimedSizableMap<K,V>{
     // This method will run in a background thread.
     // every inteval it will wake up and remove all expired objects to clear the memory
     private void runGC (long interval){
-
         this.timer.schedule(new TimerTask() {
             @Override
             public void run() {
+                wLock.lock();
                 map.entrySet().removeIf(e-> {
                     return isExpired(e.getValue());
                 });
+                wLock.unlock();
             }
         },0,interval);
     }
