@@ -32,7 +32,7 @@ public class NaiveMapTest {
 
     @Test
     public void shouldInsertParallel() throws InterruptedException {
-        for (int j=0;j<15;j++){
+        for (int j=0;j<1;j++){
             NaiveMap<Integer, Integer> map = new NaiveMap<>(1);
 
             Thread t1 = new Thread(()->{
