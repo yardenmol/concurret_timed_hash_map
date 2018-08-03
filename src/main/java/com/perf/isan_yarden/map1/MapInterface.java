@@ -3,7 +3,7 @@ package com.perf.isan_yarden.map1;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
-public class Map1 {
+public class MapInterface {
 
     /**
      * A time-based map, to which elements may be added for a maximal time amount.

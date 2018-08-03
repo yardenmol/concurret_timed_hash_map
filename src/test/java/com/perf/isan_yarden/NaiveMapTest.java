@@ -13,7 +13,7 @@ public class NaiveMapTest {
 
     @Test
     public void shouldInsertValue(){
-        NaiveMap<String, Integer> map = new NaiveMap<>(1);
+        NaiveMap<String, Integer> map = new NaiveMap<>(1, TimeUnit.SECONDS);
         assertEquals(0,map.size());
         map.put("yarden",5,4,TimeUnit.SECONDS);
         assertEquals(1,map.size());
@@ -22,7 +22,7 @@ public class NaiveMapTest {
 
     @Test
     public void shouldGcRemove() throws InterruptedException {
-        NaiveMap<String, Integer> map = new NaiveMap<>(1);
+        NaiveMap<String, Integer> map = new NaiveMap<>(1, TimeUnit.SECONDS);
         map.put("yarden",5,1,TimeUnit.SECONDS);
         Thread.sleep(2000);
         assertFalse(map.get("yarden").isPresent());
@@ -32,8 +32,8 @@ public class NaiveMapTest {
 
     @Test
     public void shouldInsertParallel() throws InterruptedException {
-        for (int j=0;j<1;j++){
-            NaiveMap<Integer, Integer> map = new NaiveMap<>(1);
+        for (int j=0;j<15;j++){
+            NaiveMap<Integer, Integer> map = new NaiveMap<>(1, TimeUnit.SECONDS);
 
             Thread t1 = new Thread(()->{
                 for(int i=0; i<100;i++)
@@ -60,7 +60,7 @@ public class NaiveMapTest {
 
     @Test
     public void shouldReturnLastValueOfKey() throws InterruptedException {
-        NaiveMap<String, Integer> map = new NaiveMap<>(1);
+        NaiveMap<String, Integer> map = new NaiveMap<>(1, TimeUnit.SECONDS);
         map.put("isan",5,10,TimeUnit.SECONDS);
         map.put("isan",6,10,TimeUnit.SECONDS);
         map.get("isan").ifPresent(val->{
@@ -70,7 +70,7 @@ public class NaiveMapTest {
     }
     @Test
     public void shouldDropHalfInputs() throws InterruptedException {
-        NaiveMap<Integer, Integer> map = new NaiveMap<>(1);
+        NaiveMap<Integer, Integer> map = new NaiveMap<>(1, TimeUnit.SECONDS);
         int size = 10_000;
         Thread t1 = new Thread(()->{
             for(int i=0;i<size;++i){

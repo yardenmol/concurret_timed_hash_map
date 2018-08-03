@@ -7,9 +7,9 @@ public class TimedValue<V> {
     private final V value;
     private final long time;
 
-    public TimedValue(V _val, long duration, TimeUnit unit){
+    public TimedValue(V val, long duration, TimeUnit unit){
 
-        this.value = _val;
+        this.value = val;
         long mills_timestamp = unit.toMillis(duration);
         this.time = System.currentTimeMillis() + mills_timestamp;
     }
